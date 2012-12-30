@@ -1,0 +1,5 @@
+<Models:StockItem xmlns:Models="clr-namespace:RestuarantPOI.Models" xmlns:System="clr-namespace:System;assembly=mscorlib" Error="Maecenas class curae nam" Id="16" ItemName="Curabitur phasellus consequat convallis aenean" Unit="Kg" isValid="True">
+	<Models:StockItem.Quantity>
+		<System:Decimal/>
+	</Models:StockItem.Quantity>
+</Models:StockItem>

@@ -1,0 +1,175 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:models="clr-namespace:RestuarantPOI.Models"
+      xmlns:i="clr-namespace:Microsoft.Expression.Interactivity;assembly=Microsoft.Expression.Interactivity"
+      xmlns:local="clr-namespace:RestuarantPOI.Helpers"
+      xmlns:shaderEffectLibrary="clr-namespace:ShaderEffectLibrary;assembly=ShaderEffectLibrary" x:Class="RestuarantPOI.Pages.AddNewItem"
+      mc:Ignorable="d"
+	Title="AddNewItem" HorizontalAlignment="Center" d:DesignWidth="600" d:DesignHeight="1000">
+
+    <!-- Main Grid -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+
+        <!-- Background Grid -->
+        <Grid x:Name="grid1" Grid.ColumnSpan="3" Grid.RowSpan="5">
+            <Image Stretch="Fill" x:Name="Image" d:IsHidden="True">
+                <Image.Source>
+                    <CroppedBitmap Source="../Images/Background.png" SourceRect="931,104,1117,1432"/>
+                </Image.Source>
+            </Image>
+        </Grid>
+        <!-- /Background Grid -->
+
+        <!-- Effects -->
+        <Border Grid.Column="1" Grid.Row="0" Opacity="0.995" Style="{DynamicResource BorderStyle}">
+            <i:Interaction.Behaviors>
+                <local:GlassBehavior Visual="{Binding ElementName=grid1, Mode=OneWay}">
+                    <local:GlassBehavior.Effect>
+                        <BlurEffect/>
+                    </local:GlassBehavior.Effect>
+                </local:GlassBehavior>
+            </i:Interaction.Behaviors>
+        </Border>
+        <!-- /Effects -->
+        <!-- Effects -->
+        <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Opacity="0.995" Style="{DynamicResource BorderStyle}" Margin="30,0">
+            <i:Interaction.Behaviors>
+                <local:GlassBehavior Visual="{Binding ElementName=grid1, Mode=OneWay}">
+                    <local:GlassBehavior.Effect>
+                        <BlurEffect/>
+                    </local:GlassBehavior.Effect>
+                </local:GlassBehavior>
+            </i:Interaction.Behaviors>
+        </Border>
+        <!-- /Effects -->
+
+
+        <!-- Content Grid -->
+        <Grid Grid.Column="1" Grid.Row="0" d:DataContext="{d:DesignInstance {x:Type models:Item}}" x:Name="MainGrid" Margin="30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!-- Image -->
+            <Grid Grid.Column="1">
+                <Border Height="200" Width="200" CornerRadius="10" d:IsHidden="True">
+                    <i:Interaction.Behaviors>
+                        <local:GlassBehavior Visual="{Binding ElementName=grid1, Mode=OneWay}">
+                            <local:GlassBehavior.Effect>
+                                <BlurEffect/>
+                            </local:GlassBehavior.Effect>
+                        </local:GlassBehavior>
+                    </i:Interaction.Behaviors>
+                    <Border.Effect>
+                        <shaderEffectLibrary:BrightExtractEffect Threshold="0.13"/>
+                    </Border.Effect>
+                </Border>
+                <Border BorderThickness="1" CornerRadius="10" BorderBrush="Black" Opacity="0.1" d:IsHidden="True">
+                    <Border.Effect>
+                        <DropShadowEffect Direction="175" ShadowDepth="0" BlurRadius="4" Color="White"/>
+                    </Border.Effect>
+                </Border>
+            </Grid>
+            <!-- /Image -->
+
+            <!-- Item Name -->
+            <TextBox x:Name="ItemName" Grid.ColumnSpan="3" ToolTip="Click to edit" Text="{Binding ItemName, TargetNullValue=Item Name}" HorizontalAlignment="Center" Grid.Row="1" FontSize="27" Style="{DynamicResource NewItemTextBoxStyle}"/>
+            <!-- /Item Name -->
+
+            <!-- Price -->
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Center" >
+                <TextBox x:Name="PriceLabel" Style="{DynamicResource NewItemTextBoxStyle}" IsReadOnly="True">Price</TextBox>
+                <TextBox x:Name="Price" Text="{Binding Price, TargetNullValue=0}"  FontSize="27" Style="{DynamicResource NewItemTextBoxStyle}" ToolTip="Click to edit"/>
+                <TextBox x:Name="CurrencyLabel" Style="{DynamicResource NewItemTextBoxStyle}" IsReadOnly="True">PKR</TextBox>
+            </StackPanel>
+            <!-- /Price -->
+
+            <!-- Buttons -->
+            <Grid Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Right" Margin="0,20,-15,-15">
+                <StackPanel Orientation="Horizontal">
+                    <!-- Ingredients Button -->
+                    <Button Template="{StaticResource ItemScreenButtonTemplate}" Style="{DynamicResource ItemScreenButtonStyle}" Margin="0">Ingredients</Button>
+                    <!-- /Ingredients Button -->
+                    <!-- Save Button -->
+                    <Button Template="{StaticResource ItemScreenButtonTemplate}" Style="{DynamicResource ItemScreenButtonStyle}">Save</Button>
+                    <!-- /Save Button -->
+                </StackPanel>
+            </Grid>
+            <!-- /Buttons -->
+
+
+
+
+        </Grid>
+        <!-- /Content Grid -->
+
+
+        <!-- Ingredients Panel -->
+        <DockPanel Dock="Bottom" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Margin="30,0" LastChildFill="True" Height="Auto">
+            <TextBox Style="{StaticResource NewItemTextBoxStyle}" FontFamily="Mardian Demo" DockPanel.Dock="Top" FontSize="40" Text="Ingredients"/>
+            <Grid Margin="10,0,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" DockPanel.Dock="Top" Height="Auto">
+                <Border CornerRadius="10" x:Name="DataGridBorder" Background="Black" VerticalAlignment="Stretch">
+                    <i:Interaction.Behaviors>
+                        <local:GlassBehavior Visual="{Binding ElementName=grid1, Mode=OneWay}">
+                            <local:GlassBehavior.Effect>
+                                <BlurEffect/>
+                            </local:GlassBehavior.Effect>
+                        </local:GlassBehavior>
+                    </i:Interaction.Behaviors>
+                    <Border.Effect>
+                        <shaderEffectLibrary:BrightExtractEffect Threshold="0.13"/>
+                    </Border.Effect>
+                </Border>
+                <DataGrid Margin="5" x:Name="StockDataGrid" AutoGenerateColumns="False" d:DataContext="{d:DesignInstance {x:Type models:StockItem}}" CanUserResizeRows="False" BorderBrush="{x:Null}" HeadersVisibility="Column" CanUserAddRows="False" Style="{DynamicResource DataGridStyle}" CellStyle="{DynamicResource DataGridCellStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" RowStyle="{DynamicResource DataGridRowStyle}" HorizontalGridLinesBrush="#FFDDDDDD" GridLinesVisibility="None" >
+                	<DataGrid.Resources>
+                	    <Style x:Key="DataGridTextBoxStyle" TargetType="{x:Type TextBox}">
+                            <Setter Property="Background" Value="#FFD6D6D6"></Setter>
+                            <Setter Property="BorderThickness" Value="0"></Setter>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.ItemsSource>
+                        <Binding Path="Collection" Source="{StaticResource StockSampleData}"/>
+                    </DataGrid.ItemsSource>
+                    <DataGrid.OpacityMask>
+                        <VisualBrush Visual="{Binding ElementName=DataGridBorder}"/>
+                    </DataGrid.OpacityMask>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Item Name" Width="5*" Binding="{Binding ItemName, ValidatesOnDataErrors=True, TargetNullValue=Item Name}" EditingElementStyle="{StaticResource DataGridTextBoxStyle}">
+                            <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="ToolTip" Value="Hello" />
+                            </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Quantity" Width="2*" Binding="{Binding Quantity, FallbackValue=0, TargetNullValue=0, ValidatesOnDataErrors=True}"/>
+                        <DataGridComboBoxColumn Header="Unit" Width="*" ItemsSource="{Binding Source={StaticResource GetEnumValues}}" SelectedValueBinding="{Binding Unit}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+        </DockPanel>
+        <!-- /Ingredients Panel -->
+
+    </Grid>
+    <!-- /Main Grid -->
+</Page>

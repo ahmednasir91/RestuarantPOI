@@ -1,0 +1,58 @@
+﻿<Page x:Class="RestuarantPOI.Pages.ItemsList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:models="clr-namespace:RestuarantPOI.Models"
+      xmlns:restuarantPoi="clr-namespace:RestuarantPOI"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="600"
+      xmlns:i="http://schemas.microsoft.com/expression/2009/interactivity"
+      xmlns:local="clr-namespace:RestuarantPOI.Helpers"
+      Title="ItemsList" Loaded="ItemsList_OnLoaded">
+    <Page.Resources>
+        <restuarantPoi:ImageConverter x:Key="ImageConverter" />
+        <DataTemplate x:Key="ItemsListBoxTemplate" DataType="models:Item">
+            <Grid Margin="10">
+                <Border Background="#FF545454" BorderBrush="#6f3f1e" BorderThickness="1" CornerRadius="10" Margin="5">
+                    <i:Interaction.Behaviors>
+                        <local:GlassBehavior Visual="{Binding ElementName=grid1, Mode=OneWay}">
+                            <local:GlassBehavior.Effect>
+                                <BlurEffect/>
+                            </local:GlassBehavior.Effect>
+                        </local:GlassBehavior>
+                    </i:Interaction.Behaviors>
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="1"/>
+                    </Border.Effect>
+                </Border>
+                <StackPanel Margin="10">
+                    <Image Source="{Binding Image, Converter={StaticResource ImageConverter}}" Height="100" Width="100" HorizontalAlignment="Center"></Image>
+                    <TextBlock Foreground="#9c471d" Text="{Binding ItemName}" HorizontalAlignment="Center">
+                        <TextBlock.Effect>
+                            <DropShadowEffect ShadowDepth="0" BlurRadius="1" Color="#7b3715"></DropShadowEffect>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <Grid x:Name="grid1">
+            <Image Stretch="Fill" x:Name="image">
+                <Image.Source>
+                    <CroppedBitmap Source="../Images/Background.png" SourceRect="931,104,1117,1432"></CroppedBitmap>
+                </Image.Source>
+            </Image>
+            
+        </Grid>
+        <Grid>
+            <ListBox Name="ItemsListBox" ItemTemplate="{StaticResource ItemsListBoxTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="Transparent" BorderThickness="0">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" VerticalAlignment="Top"></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Grid>
+    </Grid>
+</Page>
