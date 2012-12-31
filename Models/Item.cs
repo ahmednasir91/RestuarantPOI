@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using RestuarantPOI.Annotations;
 
@@ -12,7 +13,19 @@ namespace RestuarantPOI.Models
         private decimal _price;
         public decimal Price { get { return _price; } set { _price = value; OnPropertyChanged(); } }
         private string _image;
+        private List<StockItem> _ingredients;
         public string Image { get { return _image; } set { _image = value; OnPropertyChanged(); } }
+
+        public List<StockItem> Ingredients
+        {
+            get { return _ingredients = _ingredients ?? new List<StockItem>(); }
+            set
+            {
+                if (Equals(value, _ingredients)) return;
+                _ingredients = value;
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

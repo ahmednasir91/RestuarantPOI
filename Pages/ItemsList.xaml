@@ -3,19 +3,18 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:models="clr-namespace:RestuarantPOI.Models"
-      xmlns:restuarantPoi="clr-namespace:RestuarantPOI"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="600"
       xmlns:i="http://schemas.microsoft.com/expression/2009/interactivity"
       xmlns:local="clr-namespace:RestuarantPOI.Helpers"
       Title="ItemsList" Loaded="ItemsList_OnLoaded">
     <Page.Resources>
-        <restuarantPoi:ImageConverter x:Key="ImageConverter" />
+        
         <DataTemplate x:Key="ItemsListBoxTemplate" DataType="models:Item">
             <Grid Margin="10">
                 <Border Background="#FF545454" BorderBrush="#6f3f1e" BorderThickness="1" CornerRadius="10" Margin="5">
                     <i:Interaction.Behaviors>
-                        <local:GlassBehavior Visual="{Binding ElementName=grid1, Mode=OneWay}">
+                        <local:GlassBehavior Visual="{Binding ElementName=Grid1, Mode=OneWay}">
                             <local:GlassBehavior.Effect>
                                 <BlurEffect/>
                             </local:GlassBehavior.Effect>
@@ -37,8 +36,8 @@
         </DataTemplate>
     </Page.Resources>
     <Grid>
-        <Grid x:Name="grid1">
-            <Image Stretch="Fill" x:Name="image">
+        <Grid x:Name="Grid1">
+            <Image Stretch="Fill" x:Name="Image">
                 <Image.Source>
                     <CroppedBitmap Source="../Images/Background.png" SourceRect="931,104,1117,1432"></CroppedBitmap>
                 </Image.Source>

@@ -5,26 +5,25 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:models="clr-namespace:RestuarantPOI.Models"
       xmlns:i="clr-namespace:Microsoft.Expression.Interactivity;assembly=Microsoft.Expression.Interactivity"
       xmlns:local="clr-namespace:RestuarantPOI.Helpers"
-      xmlns:shaderEffectLibrary="clr-namespace:ShaderEffectLibrary;assembly=ShaderEffectLibrary" x:Class="RestuarantPOI.Pages.AddNewItem"
+      xmlns:shaderEffectLibrary="clr-namespace:ShaderEffectLibrary;assembly=ShaderEffectLibrary"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="RestuarantPOI.Pages.AddNewItem"
       mc:Ignorable="d"
 	Title="AddNewItem" HorizontalAlignment="Center" d:DesignWidth="600" d:DesignHeight="1000">
 
     <!-- Main Grid -->
-    <Grid>
+    <Grid x:Name="MainGrid" d:DataContext="{d:DesignInstance {x:Type models:Item}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-
         </Grid.RowDefinitions>
 
         <!-- Background Grid -->
-        <Grid x:Name="grid1" Grid.ColumnSpan="3" Grid.RowSpan="5">
+        <Grid x:Name="Grid1" Grid.ColumnSpan="3" Grid.RowSpan="5">
             <Image Stretch="Fill" x:Name="Image" d:IsHidden="True">
                 <Image.Source>
                     <CroppedBitmap Source="../Images/Background.png" SourceRect="931,104,1117,1432"/>
@@ -36,7 +35,7 @@
         <!-- Effects -->
         <Border Grid.Column="1" Grid.Row="0" Opacity="0.995" Style="{DynamicResource BorderStyle}">
             <i:Interaction.Behaviors>
-                <local:GlassBehavior Visual="{Binding ElementName=grid1, Mode=OneWay}">
+                <local:GlassBehavior Visual="{Binding ElementName=Grid1, Mode=OneWay}">
                     <local:GlassBehavior.Effect>
                         <BlurEffect/>
                     </local:GlassBehavior.Effect>
@@ -44,10 +43,11 @@
             </i:Interaction.Behaviors>
         </Border>
         <!-- /Effects -->
+       
         <!-- Effects -->
         <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Opacity="0.995" Style="{DynamicResource BorderStyle}" Margin="30,0">
             <i:Interaction.Behaviors>
-                <local:GlassBehavior Visual="{Binding ElementName=grid1, Mode=OneWay}">
+                <local:GlassBehavior Visual="{Binding ElementName=Grid1, Mode=OneWay}">
                     <local:GlassBehavior.Effect>
                         <BlurEffect/>
                     </local:GlassBehavior.Effect>
@@ -58,7 +58,7 @@
 
 
         <!-- Content Grid -->
-        <Grid Grid.Column="1" Grid.Row="0" d:DataContext="{d:DesignInstance {x:Type models:Item}}" x:Name="MainGrid" Margin="30">
+        <Grid Grid.Column="1" Grid.Row="0"  Margin="30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
@@ -72,9 +72,9 @@
             </Grid.RowDefinitions>
             <!-- Image -->
             <Grid Grid.Column="1">
-                <Border Height="200" Width="200" CornerRadius="10" d:IsHidden="True">
+                <Border Height="200" Width="200" CornerRadius="10" ToolTip="Click here, to choose an image." Name="ImageViewUpload" MouseDown="ImageViewUpload_OnMouseDown">
                     <i:Interaction.Behaviors>
-                        <local:GlassBehavior Visual="{Binding ElementName=grid1, Mode=OneWay}">
+                        <local:GlassBehavior Visual="{Binding ElementName=Grid1, Mode=OneWay}">
                             <local:GlassBehavior.Effect>
                                 <BlurEffect/>
                             </local:GlassBehavior.Effect>
@@ -83,8 +83,10 @@
                     <Border.Effect>
                         <shaderEffectLibrary:BrightExtractEffect Threshold="0.13"/>
                     </Border.Effect>
+                    <Image Source="{Binding Image, Converter={StaticResource ImageConverter}}" Margin="-5" Height="200" Width="200"></Image>
                 </Border>
-                <Border BorderThickness="1" CornerRadius="10" BorderBrush="Black" Opacity="0.1" d:IsHidden="True">
+                
+                <Border BorderThickness="1" CornerRadius="10" BorderBrush="Black" Opacity="0.1">
                     <Border.Effect>
                         <DropShadowEffect Direction="175" ShadowDepth="0" BlurRadius="4" Color="White"/>
                     </Border.Effect>
@@ -126,11 +128,20 @@
 
         <!-- Ingredients Panel -->
         <DockPanel Dock="Bottom" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Margin="30,0" LastChildFill="True" Height="Auto">
-            <TextBox Style="{StaticResource NewItemTextBoxStyle}" FontFamily="Mardian Demo" DockPanel.Dock="Top" FontSize="40" Text="Ingredients"/>
+            <DockPanel DockPanel.Dock="Top">
+                <TextBox DockPanel.Dock="Left" Style="{StaticResource NewItemTextBoxStyle}" FontFamily="Mardian Demo" FontSize="40" Text="Ingredients"/>
+                <DockPanel  DockPanel.Dock="Right" LastChildFill="False">
+                    <xctk:DropDownButton DockPanel.Dock="Right" Style="{DynamicResource ItemScreenButtonStyle}" Margin="10" Content="Add">
+                        <xctk:DropDownButton.DropDownContent>
+                            <ListBox Name="NewIngredientList" />
+                        </xctk:DropDownButton.DropDownContent>
+                    </xctk:DropDownButton>
+                </DockPanel>
+            </DockPanel>
             <Grid Margin="10,0,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" DockPanel.Dock="Top" Height="Auto">
                 <Border CornerRadius="10" x:Name="DataGridBorder" Background="Black" VerticalAlignment="Stretch">
                     <i:Interaction.Behaviors>
-                        <local:GlassBehavior Visual="{Binding ElementName=grid1, Mode=OneWay}">
+                        <local:GlassBehavior Visual="{Binding ElementName=Grid1, Mode=OneWay}">
                             <local:GlassBehavior.Effect>
                                 <BlurEffect/>
                             </local:GlassBehavior.Effect>
@@ -141,8 +152,8 @@
                     </Border.Effect>
                 </Border>
                 <DataGrid Margin="5" x:Name="StockDataGrid" AutoGenerateColumns="False" d:DataContext="{d:DesignInstance {x:Type models:StockItem}}" CanUserResizeRows="False" BorderBrush="{x:Null}" HeadersVisibility="Column" CanUserAddRows="False" Style="{DynamicResource DataGridStyle}" CellStyle="{DynamicResource DataGridCellStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" RowStyle="{DynamicResource DataGridRowStyle}" HorizontalGridLinesBrush="#FFDDDDDD" GridLinesVisibility="None" >
-                	<DataGrid.Resources>
-                	    <Style x:Key="DataGridTextBoxStyle" TargetType="{x:Type TextBox}">
+                    <DataGrid.Resources>
+                        <Style x:Key="DataGridTextBoxStyle" TargetType="{x:Type TextBox}">
                             <Setter Property="Background" Value="#FFD6D6D6"></Setter>
                             <Setter Property="BorderThickness" Value="0"></Setter>
                         </Style>
@@ -154,13 +165,7 @@
                         <VisualBrush Visual="{Binding ElementName=DataGridBorder}"/>
                     </DataGrid.OpacityMask>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Item Name" Width="5*" Binding="{Binding ItemName, ValidatesOnDataErrors=True, TargetNullValue=Item Name}" EditingElementStyle="{StaticResource DataGridTextBoxStyle}">
-                            <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="ToolTip" Value="Hello" />
-                            </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Item Name" Width="5*" Binding="{Binding ItemName, ValidatesOnDataErrors=True, TargetNullValue=Item Name}" EditingElementStyle="{StaticResource DataGridTextBoxStyle}" />
                         <DataGridTextColumn Header="Quantity" Width="2*" Binding="{Binding Quantity, FallbackValue=0, TargetNullValue=0, ValidatesOnDataErrors=True}"/>
                         <DataGridComboBoxColumn Header="Unit" Width="*" ItemsSource="{Binding Source={StaticResource GetEnumValues}}" SelectedValueBinding="{Binding Unit}"/>
                     </DataGrid.Columns>

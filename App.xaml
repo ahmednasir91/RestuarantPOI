@@ -5,11 +5,12 @@
              xmlns:sampleData="clr-namespace:Expression.Blend.SampleData.StockSampleData" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:models="clr-namespace:RestuarantPOI.Models"
+             xmlns:restuarantPoi="clr-namespace:RestuarantPOI"
              mc:Ignorable="d" x:Class="RestuarantPOI.App"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
     	<sampleData:StockSampleData x:Key="StockSampleData" d:IsDataSource="True"/>
-
+        <restuarantPoi:ImageConverter x:Key="ImageConverter" />
         <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type system:Enum}" x:Key="GetEnumValues">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="models:Unit"/>
@@ -80,7 +81,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                             <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
                     </ControlTemplate>
@@ -197,7 +198,7 @@
                 </TextBlock>
             </Grid>
         </ControlTemplate>
-        <Style x:Key="ItemScreenButtonStyle" TargetType="{x:Type Button}">
+        <Style x:Key="ItemScreenButtonStyle" TargetType="{x:Type Control}">
             <Setter Property="Background">
                 <Setter.Value>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using Microsoft.Win32;
 using RestuarantPOI.Models;
 
@@ -19,20 +20,6 @@ namespace RestuarantPOI.Pages
             MainGrid.DataContext = _item;
         }
 
-
-        private void ImageUpload_OnClick(object sender, RoutedEventArgs e)
-        {
-            var fileDialog = new OpenFileDialog
-                                 {
-                                     Filter =
-                                         "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF",
-                                 };
-            if (!((bool) fileDialog.ShowDialog())) return;
-            if (!Directory.Exists("Images/Items"))
-                Directory.CreateDirectory("Images/Items");
-            File.Copy(fileDialog.FileName, "Images/Items/" + fileDialog.SafeFileName);
-            _item.Image = fileDialog.SafeFileName;
-        }
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
@@ -63,6 +50,21 @@ namespace RestuarantPOI.Pages
                 
                 MessageBox.Show("Settings Saved!", "Info");
             }
+        }
+
+        private void ImageViewUpload_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var fileDialog = new OpenFileDialog
+            {
+                Filter =
+                    "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF",
+            };
+            if (!((bool)fileDialog.ShowDialog())) return;
+            if (!Directory.Exists("Images/Items"))
+                Directory.CreateDirectory("Images/Items");
+            var fileName = DateTime.UtcNow.Ticks + Path.GetExtension(fileDialog.SafeFileName);
+            File.Copy(fileDialog.FileName, "Images/Items/" + fileName, true);
+            _item.Image = fileName;
         }
     }
 }
