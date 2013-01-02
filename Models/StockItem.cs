@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -21,9 +20,20 @@ namespace RestuarantPOI.Models
         private string _itemName;
         private decimal _quantity;
         private Unit _unit;
-        private readonly Dictionary<string, bool> errorDictionary = new Dictionary<string, bool>();
+        private readonly Dictionary<string, bool> _errorDictionary = new Dictionary<string, bool>();
         private bool _isValid;
-        public bool isValid
+
+        public StockItem()
+        {
+            
+        }
+
+        public StockItem(string itemName)
+        {
+            ItemName = itemName;
+        }
+
+        public bool IsValid
         {
             get { return _isValid; }
             set
@@ -72,8 +82,8 @@ namespace RestuarantPOI.Models
         {
             get
             {
-                errorDictionary[columnName] = true;
-                isValid = false;
+                _errorDictionary[columnName] = true;
+                IsValid = false;
                 if (columnName.Equals("ItemName"))
                 {
                     if (string.IsNullOrEmpty(ItemName))
@@ -86,8 +96,8 @@ namespace RestuarantPOI.Models
                     if (Quantity < 0)
                         return "Please enter a quantity greater than 0";
                 }
-                errorDictionary[columnName] = false;
-                isValid = errorDictionary.All(kv => !kv.Value);
+                _errorDictionary[columnName] = false;
+                IsValid = _errorDictionary.All(kv => !kv.Value);
                 return string.Empty;
             }
         }
@@ -96,15 +106,11 @@ namespace RestuarantPOI.Models
         {
             get
             {
-                StringBuilder error = new StringBuilder();
-                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(this);
-                foreach (PropertyDescriptor prop in props)
+                var error = new StringBuilder();
+                var props = TypeDescriptor.GetProperties(this);
+                foreach (string propertyError in props.Cast<PropertyDescriptor>().Select(prop => this[prop.Name]).Where(propertyError => propertyError != string.Empty))
                 {
-                    String propertyError = this[prop.Name];
-                    if (propertyError != string.Empty)
-                    {
-                        error.Append((error.Length != 0 ? ", " : "") + propertyError);
-                    }
+                    error.Append((error.Length != 0 ? ", " : "") + propertyError);
                 }
 
                 return error.Length == 0 ? null : error.ToString();
@@ -114,7 +120,7 @@ namespace RestuarantPOI.Models
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
+            var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using RestuarantPOI.Models;
 
 namespace RestuarantPOI.Pages
@@ -10,7 +11,7 @@ namespace RestuarantPOI.Pages
     /// </summary>
     public partial class ItemsList
     {
-        private IList<Item> itemsList; 
+        private IList<Item> _itemsList; 
         public ItemsList()
         {
             InitializeComponent();
@@ -21,9 +22,16 @@ namespace RestuarantPOI.Pages
         {
             using (var ds = await Task.Run(() => new DataStorage()))
             {
-                itemsList = ds.Items();
+                _itemsList = ds.Items();
             }
-            ItemsListBox.ItemsSource = itemsList;
+            ItemsListBox.ItemsSource = _itemsList;
+        }
+
+        private void ItemsListBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+            if (ItemsListBox.SelectedItem != null)
+                NavigationService.Navigate(new AddNewItem(ItemsListBox.SelectedItem as Item));
         }
     }
 }

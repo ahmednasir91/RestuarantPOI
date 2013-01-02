@@ -24,7 +24,7 @@ namespace RestuarantPOI.Pages
         {
             using (var ds = await Task.Run(() => new DataStorage()))
             {
-                StockItems = ds.StockItems();
+                StockItems = (BindingList<StockItem>) ds.StockItems();
             }
             StockDataGrid.DataContext = StockItems;
             StockDataGrid.ItemsSource = StockItems;
@@ -32,7 +32,7 @@ namespace RestuarantPOI.Pages
 
         private void AddNew_OnClick(object sender, RoutedEventArgs e)
         {
-            if ((StockItems.Count > 0 && StockItems.Last().isValid) || StockItems.Count == 0)
+            if ((StockItems.Count > 0 && StockItems.Last().IsValid) || StockItems.Count == 0)
             {
                 StockItems.AddNew();
                 StockDataGrid.Focus();
@@ -44,7 +44,7 @@ namespace RestuarantPOI.Pages
         
         private async void Save_OnClick(object sender, RoutedEventArgs e)
         {
-            if (StockItems.All(s => s.isValid))
+            if (StockItems.All(s => s.IsValid))
                 using (var ds = await Task.Run(() => new DataStorage()))
                 {
                     ds.SaveStock(StockItems);

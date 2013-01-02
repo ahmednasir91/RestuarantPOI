@@ -124,6 +124,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\BooleanOrConverter.cs" />
+    <Compile Include="Helpers\EnumerableExtensions.cs" />
+    <Compile Include="Helpers\RemainingIngredients.cs" />
     <Compile Include="SampleData\StockSampleData\StockSampleData.xaml.cs">
       <DependentUpon>StockSampleData.xaml</DependentUpon>
     </Compile>

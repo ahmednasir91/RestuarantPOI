@@ -47,7 +47,6 @@
                             <Style x:Key="DataGridTextBoxStyle" TargetType="{x:Type TextBox}">
                                 <Setter Property="Background" Value="#FFD6D6D6"></Setter>
                                 <Setter Property="BorderThickness" Value="0"></Setter>
-                             
                             </Style>
                         </DataGrid.Resources>
                         <DataGrid.ItemsSource>

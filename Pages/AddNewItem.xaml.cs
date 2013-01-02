@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Win32;
 using RestuarantPOI.Models;
@@ -13,13 +15,14 @@ namespace RestuarantPOI.Pages
     public partial class AddNewItem
     {
         private readonly Item _item;
-        public AddNewItem()
+        public AddNewItem(Item item = null)
         {
             InitializeComponent();
-            _item = new Item();
+            _item = item ?? new Item();
             MainGrid.DataContext = _item;
+            StockDataGrid.Columns[0].IsReadOnly = true;
+            StockDataGrid.Columns[2].IsReadOnly = true;
         }
-
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
@@ -47,7 +50,7 @@ namespace RestuarantPOI.Pages
                     MessageBox.Show("An error occured while saving." + ex.Message, "Error");
                     return;
                 }
-                
+
                 MessageBox.Show("Settings Saved!", "Info");
             }
         }
@@ -65,6 +68,50 @@ namespace RestuarantPOI.Pages
             var fileName = DateTime.UtcNow.Ticks + Path.GetExtension(fileDialog.SafeFileName);
             File.Copy(fileDialog.FileName, "Images/Items/" + fileName, true);
             _item.Image = fileName;
+        }
+
+        private void NewIngredientList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            NewIngredientDropDown.IsOpen = false;
+            if (e.AddedItems.Count == 0)
+                return;
+            var itemName = e.AddedItems[0].ToString();
+            _item.Ingredients.Add(new StockItem(itemName));
+            using (var dataStorage = new DataStorage())
+                _item.Ingredients.Last().Unit = dataStorage.StockItem(itemName).Unit;
+            StockDataGrid.Focus();
+            StockDataGrid.CurrentCell = new DataGridCellInfo(StockDataGrid.Items[StockDataGrid.Items.Count - 1], StockDataGrid.Columns[1]);
+            StockDataGrid.BeginEdit();
+        }
+
+        private void Save_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!Validate())
+                return;
+            using (var dataStorage = new DataStorage())
+            {
+                dataStorage.SaveItem(_item);
+            }
+            MessageBox.Show("Item has been saved successfully.", "Success");
+
+        }
+
+        private  bool Validate()
+        {
+            if (String.IsNullOrEmpty(_item.ItemName))
+                Message("Item Name is empty.");
+            else if(_item.ItemName.Equals("Item Name"))
+                Message("Please edit the Item Name.");
+            else if(_item.Price <= 0)
+                Message("Please enter a price.");
+            else
+                return true;
+            return false;
+        }
+
+        private static void Message(string message)
+        {
+            MessageBox.Show(message, "Error");
         }
     }
 }

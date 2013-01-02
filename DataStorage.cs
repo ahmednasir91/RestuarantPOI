@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Raven.Client.Embedded;
@@ -8,16 +9,15 @@ namespace RestuarantPOI
 {
     public class DataStorage : IDisposable
     {
-        private readonly EmbeddableDocumentStore documentStore;
+        private readonly EmbeddableDocumentStore _documentStore;
         public DataStorage()
         {
-            documentStore = DocumentStore.DocumentStoreInstance;
-
+            _documentStore = DocumentStore.DocumentStoreInstance;
         }
 
         public Item AddNewItem(Item item)
         {
-            using (var session = documentStore.OpenSession())
+            using (var session = _documentStore.OpenSession())
             {
                 session.Store(item);
                 session.SaveChanges();
@@ -27,18 +27,20 @@ namespace RestuarantPOI
 
         public BindingList<Item> Items()
         {
-            using (var session = documentStore.OpenSession())
-            {
+            using (var session = _documentStore.OpenSession())
                 return new BindingList<Item>(session.Query<Item>().ToList());
-            }
         }
 
-        public BindingList<StockItem> StockItems()
+        public IList<StockItem> StockItems()
         {
-            using (var session = documentStore.OpenSession())
-            {
+            using (var session = _documentStore.OpenSession())
                 return new BindingList<StockItem>(session.Query<StockItem>().ToList());
-            }
+        }
+
+        public StockItem StockItem(string itemName)
+        {
+            var list = StockItems();
+            return list.SingleOrDefault(s => s.ItemName.Equals(itemName));
         }
 
         public void Dispose()
@@ -48,10 +50,19 @@ namespace RestuarantPOI
 
         public void SaveStock(BindingList<StockItem> stockItems)
         {
-            using (var session = documentStore.OpenSession())
+            using (var session = _documentStore.OpenSession())
             {
                 foreach (var stockItem in stockItems)
                     session.Store(stockItem);
+                session.SaveChanges();
+            }
+        }
+
+        public void SaveItem(Item item)
+        {
+            using (var session = _documentStore.OpenSession())
+            {
+                session.Store(item);
                 session.SaveChanges();
             }
         }

@@ -6,11 +6,15 @@
       xmlns:i="clr-namespace:Microsoft.Expression.Interactivity;assembly=Microsoft.Expression.Interactivity"
       xmlns:local="clr-namespace:RestuarantPOI.Helpers"
       xmlns:shaderEffectLibrary="clr-namespace:ShaderEffectLibrary;assembly=ShaderEffectLibrary"
-      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="RestuarantPOI.Pages.AddNewItem"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      x:Class="RestuarantPOI.Pages.AddNewItem"
       mc:Ignorable="d"
 	Title="AddNewItem" HorizontalAlignment="Center" d:DesignWidth="600" d:DesignHeight="1000">
 
     <!-- Main Grid -->
+    <Page.Resources>
+        <local:RemainingIngredients x:Key="RemainingIngredients" />
+    </Page.Resources>
     <Grid x:Name="MainGrid" d:DataContext="{d:DesignInstance {x:Type models:Item}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -95,13 +99,13 @@
             <!-- /Image -->
 
             <!-- Item Name -->
-            <TextBox x:Name="ItemName" Grid.ColumnSpan="3" ToolTip="Click to edit" Text="{Binding ItemName, TargetNullValue=Item Name}" HorizontalAlignment="Center" Grid.Row="1" FontSize="27" Style="{DynamicResource NewItemTextBoxStyle}"/>
+            <TextBox x:Name="ItemName" Grid.ColumnSpan="3" ToolTip="Click to edit" Text="{Binding ItemName, TargetNullValue=Item Name, FallbackValue=Item Name}" HorizontalAlignment="Center" Grid.Row="1" FontSize="27" Style="{DynamicResource NewItemTextBoxStyle}"/>
             <!-- /Item Name -->
 
             <!-- Price -->
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Center" >
                 <TextBox x:Name="PriceLabel" Style="{DynamicResource NewItemTextBoxStyle}" IsReadOnly="True">Price</TextBox>
-                <TextBox x:Name="Price" Text="{Binding Price, TargetNullValue=0}"  FontSize="27" Style="{DynamicResource NewItemTextBoxStyle}" ToolTip="Click to edit"/>
+                <TextBox x:Name="Price" Text="{Binding Price, TargetNullValue=0, FallbackValue=0}"  FontSize="27" Style="{DynamicResource NewItemTextBoxStyle}" ToolTip="Click to edit"/>
                 <TextBox x:Name="CurrencyLabel" Style="{DynamicResource NewItemTextBoxStyle}" IsReadOnly="True">PKR</TextBox>
             </StackPanel>
             <!-- /Price -->
@@ -113,7 +117,7 @@
                     <Button Template="{StaticResource ItemScreenButtonTemplate}" Style="{DynamicResource ItemScreenButtonStyle}" Margin="0">Ingredients</Button>
                     <!-- /Ingredients Button -->
                     <!-- Save Button -->
-                    <Button Template="{StaticResource ItemScreenButtonTemplate}" Style="{DynamicResource ItemScreenButtonStyle}">Save</Button>
+                    <Button Template="{StaticResource ItemScreenButtonTemplate}" Style="{DynamicResource ItemScreenButtonStyle}" Name="Save" Click="Save_OnClick">Save</Button>
                     <!-- /Save Button -->
                 </StackPanel>
             </Grid>
@@ -131,9 +135,9 @@
             <DockPanel DockPanel.Dock="Top">
                 <TextBox DockPanel.Dock="Left" Style="{StaticResource NewItemTextBoxStyle}" FontFamily="Mardian Demo" FontSize="40" Text="Ingredients"/>
                 <DockPanel  DockPanel.Dock="Right" LastChildFill="False">
-                    <xctk:DropDownButton DockPanel.Dock="Right" Style="{DynamicResource ItemScreenButtonStyle}" Margin="10" Content="Add">
+                    <xctk:DropDownButton Name="NewIngredientDropDown" DockPanel.Dock="Right" Style="{DynamicResource ItemScreenButtonStyle}" Margin="10" Content="Add">
                         <xctk:DropDownButton.DropDownContent>
-                            <ListBox Name="NewIngredientList" />
+                            <ListBox Name="NewIngredientList" ItemsSource="{Binding Ingredients, Converter={StaticResource RemainingIngredients}, UpdateSourceTrigger=PropertyChanged}" ListBox.SelectionMode="Single" SelectionChanged="NewIngredientList_OnSelectionChanged"/>
                         </xctk:DropDownButton.DropDownContent>
                     </xctk:DropDownButton>
                 </DockPanel>
@@ -151,16 +155,14 @@
                         <shaderEffectLibrary:BrightExtractEffect Threshold="0.13"/>
                     </Border.Effect>
                 </Border>
-                <DataGrid Margin="5" x:Name="StockDataGrid" AutoGenerateColumns="False" d:DataContext="{d:DesignInstance {x:Type models:StockItem}}" CanUserResizeRows="False" BorderBrush="{x:Null}" HeadersVisibility="Column" CanUserAddRows="False" Style="{DynamicResource DataGridStyle}" CellStyle="{DynamicResource DataGridCellStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" RowStyle="{DynamicResource DataGridRowStyle}" HorizontalGridLinesBrush="#FFDDDDDD" GridLinesVisibility="None" >
+                <DataGrid Margin="5" x:Name="StockDataGrid" ItemsSource="{Binding Ingredients}"
+                          AutoGenerateColumns="False" CanUserResizeRows="False" BorderBrush="{x:Null}" HeadersVisibility="Column" CanUserAddRows="False" Style="{DynamicResource DataGridStyle}" CellStyle="{DynamicResource DataGridCellStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" RowStyle="{DynamicResource DataGridRowStyle}" HorizontalGridLinesBrush="#FFDDDDDD" GridLinesVisibility="None" >
                     <DataGrid.Resources>
                         <Style x:Key="DataGridTextBoxStyle" TargetType="{x:Type TextBox}">
                             <Setter Property="Background" Value="#FFD6D6D6"></Setter>
                             <Setter Property="BorderThickness" Value="0"></Setter>
                         </Style>
                     </DataGrid.Resources>
-                    <DataGrid.ItemsSource>
-                        <Binding Path="Collection" Source="{StaticResource StockSampleData}"/>
-                    </DataGrid.ItemsSource>
                     <DataGrid.OpacityMask>
                         <VisualBrush Visual="{Binding ElementName=DataGridBorder}"/>
                     </DataGrid.OpacityMask>

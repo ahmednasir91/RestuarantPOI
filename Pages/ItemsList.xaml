@@ -45,7 +45,7 @@
             
         </Grid>
         <Grid>
-            <ListBox Name="ItemsListBox" ItemTemplate="{StaticResource ItemsListBoxTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="Transparent" BorderThickness="0">
+            <ListBox Name="ItemsListBox" ItemTemplate="{StaticResource ItemsListBoxTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MouseDoubleClick="ItemsListBox_OnMouseDoubleClick" Background="Transparent" BorderThickness="0">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal" VerticalAlignment="Top"></WrapPanel>
