@@ -18,7 +18,16 @@ namespace RestuarantPOI
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            MainContentFrame.Navigate(new ItemsList());
+            NavigateToNewOrder();
+        }
+
+        private void NavigateToNewOrder()
+        {
+            var itemsList = new ItemsList();
+            var orderPage = new OrderPage();
+            itemsList.ItemSelected += (o, args) => orderPage.AddNewOrderItem(args);
+            MainContentFrame.Navigate(itemsList);
+            OrderFrame.Navigate(orderPage);
         }
 
         private void AddNewItem_OnClick(object sender, RoutedEventArgs e)
@@ -33,7 +42,8 @@ namespace RestuarantPOI
 
         private void NewOrder_OnClick(object sender, RoutedEventArgs e)
         {
-            MainContentFrame.Navigate(new ItemsList());
+            NavigateToNewOrder();
         }
+
     }
 }
